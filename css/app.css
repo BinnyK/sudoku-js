@@ -1,14 +1,22 @@
 #game-board {
-  margin-top: 60px;
+  margin-top: 20px;
   text-align: center; }
   #game-board table {
     display: inline-block;
     margin: 0 auto; }
 
 .box {
-  border: 1px solid grey; }
+  border: 1px solid grey;
+  font-size: 18px;
+  height: 30px;
+  width: 30px; }
 
 .box input {
   height: 30px;
+  font-size: 16px;
   text-align: center;
   width: 30px; }
+
+.button-area {
+  margin-top: 100px;
+  text-align: center; }
