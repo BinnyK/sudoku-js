@@ -1,13 +1,15 @@
 import { compose, map, split } from 'ramda'
 
+// remove whitespace
 const removeWhitespace = string =>
   string.replace(/\s/g,'')
 
+// split at each row
 const splitEvery9th = string =>
   string.match(/.{1,9}/g)
 
-
-const formatString = compose(
+// Format string into multi dimensional array
+const formatSudokuString = compose(
   map(
     split("")
   ),
@@ -16,5 +18,5 @@ const formatString = compose(
 )
 
 export {
-  formatString
+  formatSudokuString
 }

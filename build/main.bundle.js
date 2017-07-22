@@ -4660,20 +4660,21 @@ module.exports = _curry2(function where(spec, testObj) {
 
 var _formatString = __webpack_require__(120);
 
+var _validations = __webpack_require__(320);
+
+// utils
 $(document).ready(function () {
 
   // Generate sudoku board from user input
   $('#generate-board button').click(function () {
 
-    // get user input
+    // User input
     var userInput = $('#generate-board input').val();
-    var initialValues = (0, _formatString.formatString)(userInput);
+    var initialValues = (0, _formatString.formatSudokuString)(userInput);
 
-    // set board with inital values
+    // Populate with inital values
     for (var i = 0; i < initialValues.length; i++) {
-      console.log("we're on row", i + 1);
       for (var j = 0; j < initialValues[i].length; j++) {
-        console.log("col", j + 1);
         if (initialValues[i][j] !== '0') {
           $('#row' + (i + 1) + ' .col' + (j + 1)).text(initialValues[i][j]);
         }
@@ -4685,7 +4686,40 @@ $(document).ready(function () {
   $('#reset').click(function () {
     $('.box').text('');
   });
-}); // utils
+
+  // Sudoku validation
+  $('#check-valid').click(function () {
+
+    // Get current state of board
+    var getCurrentState = function getCurrentState(arr) {
+      for (var i = 0; i < arr.length; i++) {
+        for (var j = 0; j < arr[i].length; j++) {
+
+          // Replace '0's with value
+          if (arr[i][j] === '0') {
+            var value = $('#row' + (i + 1) + ' .col' + (j + 1) + ' input').val();
+            if (value.toString() === '') {
+              arr[i][j] = '0';
+            } else {
+              arr[i][j] = value.toString();
+            }
+          }
+        }
+      }
+      return arr;
+    };
+
+    // Update state
+    var newState = getCurrentState(initialValues);
+
+    // Alerts
+    if ((0, _validations.checkAllValid)(newState) === true) {
+      alert("Yo it's valid");
+    } else {
+      alert("Sorry matey, there's a mistake");
+    }
+  });
+});
 
 /***/ }),
 /* 120 */
@@ -4697,21 +4731,24 @@ $(document).ready(function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.formatString = undefined;
+exports.formatSudokuString = undefined;
 
 var _ramda = __webpack_require__(121);
 
+// remove whitespace
 var removeWhitespace = function removeWhitespace(string) {
   return string.replace(/\s/g, '');
 };
 
+// split at each row
 var splitEvery9th = function splitEvery9th(string) {
   return string.match(/.{1,9}/g);
 };
 
-var formatString = (0, _ramda.compose)((0, _ramda.map)((0, _ramda.split)("")), splitEvery9th, removeWhitespace);
+// Format string into multi dimensional array
+var formatSudokuString = (0, _ramda.compose)((0, _ramda.map)((0, _ramda.split)("")), splitEvery9th, removeWhitespace);
 
-exports.formatString = formatString;
+exports.formatSudokuString = formatSudokuString;
 
 /***/ }),
 /* 121 */
@@ -12623,6 +12660,94 @@ module.exports = _curry3(function zipWith(fn, a, b) {
   }
   return rv;
 });
+
+/***/ }),
+/* 320 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// remove '0's
+var removeZero = function removeZero(arr) {
+  return arr.filter(function (el) {
+    return el !== '0';
+  });
+};
+
+// check for duplicates
+var isValid = function isValid(arr) {
+  arr = removeZero(arr);
+  return arr.length === new Set(arr).size;
+};
+
+// validate row
+var checkValidRows = function checkValidRows(arr) {
+  for (var i = 0; i < arr.length; i++) {
+    if (isValid(arr[i]) === false) {
+      return false;
+    }
+  }
+  return true;
+};
+
+// validate col
+var checkValidCols = function checkValidCols(arr) {
+  for (var i = 0; i < arr.length; i++) {
+    if (isValid([arr[0][i], arr[1][i], arr[2][i], arr[3][i], arr[4][i], arr[5][i], arr[6][i], arr[7][i], arr[8][i]]) === false) {
+      return false;
+    }
+  }
+  return true;
+};
+
+// create new region array
+var createRegions = function createRegions(arr) {
+  return [
+  // region 1
+  [arr[0][0], arr[0][1], arr[0][2], arr[1][0], arr[1][1], arr[1][2], arr[2][0], arr[2][1], arr[2][2]],
+  // region 2
+  [arr[0][3], arr[0][4], arr[0][5], arr[1][3], arr[1][4], arr[1][5], arr[2][3], arr[2][4], arr[2][5]],
+  // region 3
+  [arr[0][6], arr[0][7], arr[0][8], arr[1][6], arr[1][7], arr[1][8], arr[2][6], arr[2][7], arr[2][8]],
+  // region 4
+  [arr[3][0], arr[3][1], arr[3][2], arr[4][0], arr[4][1], arr[4][2], arr[5][0], arr[5][1], arr[5][2]],
+  // region 5
+  [arr[3][3], arr[3][4], arr[3][5], arr[4][3], arr[4][4], arr[4][5], arr[5][3], arr[5][4], arr[5][5]],
+  // region 6
+  [arr[3][6], arr[3][7], arr[3][8], arr[4][6], arr[4][7], arr[4][8], arr[5][6], arr[5][7], arr[5][8]],
+  // region 7
+  [arr[6][0], arr[6][1], arr[6][2], arr[7][0], arr[7][1], arr[7][2], arr[8][0], arr[8][1], arr[8][2]],
+  // region 8
+  [arr[6][3], arr[6][4], arr[6][5], arr[7][3], arr[7][4], arr[7][5], arr[8][3], arr[8][4], arr[8][5]],
+  // region 9
+  [arr[6][6], arr[6][7], arr[6][8], arr[7][6], arr[7][7], arr[7][8], arr[8][6], arr[8][7], arr[8][8]]];
+};
+
+// validate region
+var checkValidRegs = function checkValidRegs(arr) {
+  arr = createRegions(arr);
+  for (var i = 0; i < arr.length; i++) {
+    if (isValid(arr[i]) === false) {
+      return false;
+    }
+  }
+  return true;
+};
+
+// validate row, col and region
+var checkAllValid = function checkAllValid(arr) {
+  return !!(checkValidRows(arr) && checkValidCols(arr) && checkValidRegs(arr));
+};
+
+exports.isValid = isValid;
+exports.checkValidRows = checkValidRows;
+exports.checkValidCols = checkValidCols;
+exports.checkValidRegs = checkValidRegs;
+exports.checkAllValid = checkAllValid;
 
 /***/ })
 /******/ ]);

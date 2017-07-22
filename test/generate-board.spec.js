@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-import { formatString } from '../js/utils/formatString'
+import { formatSudokuString } from '../js/utils/formatString'
 
 describe('Format input', () => {
   it('should convert string value into multidimensional array', () => {
@@ -15,7 +15,7 @@ describe('Format input', () => {
       300 902 005
      `
 
-    expect(formatString(userInput)).to.equal([
+    expect(formatSudokuString(userInput)).to.equal([
       [ '8', '0', '0', '4', '0', '6', '0', '0', '7' ],
       [ '0', '0', '0', '0', '0', '0', '4', '0', '0' ],
       [ '0', '1', '0', '0', '0', '0', '6', '5', '0' ],
