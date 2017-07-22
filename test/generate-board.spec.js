@@ -15,7 +15,7 @@ describe('Format input', () => {
       300 902 005
      `
 
-    expect(formatSudokuString(userInput)).to.equal([
+    expect(formatSudokuString(userInput)).to.eql([
       [ '8', '0', '0', '4', '0', '6', '0', '0', '7' ],
       [ '0', '0', '0', '0', '0', '0', '4', '0', '0' ],
       [ '0', '1', '0', '0', '0', '0', '6', '5', '0' ],

@@ -4746,7 +4746,7 @@ var splitEvery9th = function splitEvery9th(string) {
 };
 
 // Format string into multi dimensional array
-var formatSudokuString = (0, _ramda.compose)(console.log.bind(console), (0, _ramda.map)((0, _ramda.split)("")), splitEvery9th, removeWhitespace);
+var formatSudokuString = (0, _ramda.compose)((0, _ramda.map)((0, _ramda.split)("")), splitEvery9th, removeWhitespace);
 
 exports.formatSudokuString = formatSudokuString;
 
