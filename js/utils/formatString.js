@@ -10,6 +10,7 @@ const splitEvery9th = string =>
 
 // Format string into multi dimensional array
 const formatSudokuString = compose(
+  console.log.bind(console),
   map(
     split("")
   ),
