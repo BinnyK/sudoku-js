@@ -3,6 +3,7 @@ import { formatSudokuString } from './js/utils/formatString'
 import { checkAllValid } from './js/utils/validations'
 
 $(document).ready(function() {
+  let originalInput
 
   // Generate sudoku board from user input
   $('#generate-board button').click(function(){
@@ -10,6 +11,7 @@ $(document).ready(function() {
     // User input
     const userInput = $('#generate-board input').val()
     const initialValues = formatSudokuString(userInput)
+    originalInput = initialValues
 
     // Populate with inital values
     for(let i = 0; i < initialValues.length; i++) {
@@ -49,7 +51,7 @@ $(document).ready(function() {
     }
 
     // Update state
-    const newState = getCurrentState(initialValues)
+    const newState = getCurrentState(originalInput)
 
     // Alerts
     if (checkAllValid(newState) === true) {

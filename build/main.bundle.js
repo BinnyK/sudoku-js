@@ -4664,6 +4664,7 @@ var _validations = __webpack_require__(320);
 
 // utils
 $(document).ready(function () {
+  var originalInput = void 0;
 
   // Generate sudoku board from user input
   $('#generate-board button').click(function () {
@@ -4671,6 +4672,7 @@ $(document).ready(function () {
     // User input
     var userInput = $('#generate-board input').val();
     var initialValues = (0, _formatString.formatSudokuString)(userInput);
+    originalInput = initialValues;
 
     // Populate with inital values
     for (var i = 0; i < initialValues.length; i++) {
@@ -4710,7 +4712,7 @@ $(document).ready(function () {
     };
 
     // Update state
-    var newState = getCurrentState(initialValues);
+    var newState = getCurrentState(originalInput);
 
     // Alerts
     if ((0, _validations.checkAllValid)(newState) === true) {
