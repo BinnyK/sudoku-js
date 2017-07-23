@@ -80,6 +80,7 @@ Create an implementation order based on the features that build on top of each o
 5. Editing cells
 6. Check valid
 7. Solve sudoku
+8. Add styles (make it work first, then make it look good)
 
 # Challenges
 
